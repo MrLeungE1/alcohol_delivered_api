@@ -1,0 +1,17 @@
+from fastapi import FastAPI
+from app.db.init_db import init_database
+from app.routers.admin.product import router as product_router
+init_database()
+
+app = FastAPI()
+app.include_router(product_router)
+
+@app.get("/")
+def read_root():
+    return {"message": "Hello World"}
+
+
+
+if __name__ == '__main__':
+    import uvicorn
+    uvicorn.run(app, host='0.0.0.0', port=8091)
