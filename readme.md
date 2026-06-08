@@ -16,3 +16,9 @@
 8. 运行项目
    1. `uvicorn main:app --host 0.0.0.0 --port 8091`
 9.  就可以准备业务逻辑和Pydantic数据校验 请求体、响应体模型
+
+<!-- 拉去项目要做的事儿 -->
+- 创建数据库
+- init_database() 自动执行数据库迁移
+- alembic 管理数据库迁移  
+   - alembic stamp head 

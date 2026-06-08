@@ -18,5 +18,5 @@ from app.models.orders import Orders
 
 def init_database():
     # 但实际项目不推荐 一键初始化迁移数据库  而是使用 alembic 来管理数据库迁移
-    # Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
     print("✅ 数据库初始化完成")

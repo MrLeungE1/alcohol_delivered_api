@@ -15,6 +15,11 @@ class CreateProductRequest(BaseModel):
     desc: Optional[str] = Field(None, description="商品描述")
     status: int = Field(1, ge=0, le=1, description="1=上架 0=下架")
 
+class SearchProductRequest(BaseModel):
+    product_name: Optional[str] = Field(None, description="商品名称")
+    cate_id: Optional[int] = Field(None, gt=0, description="分类ID")
+    status: Optional[int] = Field(None, ge=0, le=1, description="1=上架 0=下架")
+    stock: Optional[int] = Field(None, ge=0, description="库存")
 
 
 class ProductResponse(BaseModel):
