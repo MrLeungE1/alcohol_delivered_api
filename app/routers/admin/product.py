@@ -23,3 +23,7 @@ def edit_product(request: EditProductRequest, db: Session = Depends(get_db)):
 @router.delete("/{product_id}", summary="删除商品")
 def delete_product(product_id: int, db: Session = Depends(get_db)):
     return product_service.delete_product(db, product_id)
+
+@router.get("/product/{product_id}", summary="查询商品详情")
+def get_product(product_id: int, db: Session = Depends(get_db)):
+    return product_service.get_product(db, product_id)

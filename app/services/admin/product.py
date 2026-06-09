@@ -118,3 +118,10 @@ class ProductService:
             db.rollback()
             raise HTTPException(status_code=500, detail=f"商品删除失败: {str(e)}")
         return {"message": "商品删除成功"}
+
+    # 查询商品详情
+    def get_product(self, db: Session, product_id: int):
+        product = db.scalar(select(Product).where(Product.id == product_id))
+        if not product:
+            raise HTTPException(status_code=400, detail="商品不存在")
+        return product
