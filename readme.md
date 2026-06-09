@@ -14,7 +14,7 @@
    1. 注意我们这个项目中使用的是一键初始化迁移数据库，但是在实际开发中，我们建议使用 alembic 来管理数据库迁移
 7. main.py 中 引入数据库初始化函数 并 调用
 8. 运行项目
-   1. `uvicorn main:app --host 0.0.0.0 --port 8091`
+   1. `uvicorn main:app --host 0.0.0.0 --port 8091 --reload`
 9.  就可以准备业务逻辑和Pydantic数据校验 请求体、响应体模型
 
 <!-- 拉去项目要做的事儿 -->
@@ -22,3 +22,10 @@
 - init_database() 自动执行数据库迁移
 - alembic 管理数据库迁移  
    - alembic stamp head 
+
+
+<!-- 接口实现方式 -->
+1. 定义路由 routers
+2. 定义请求体、响应体模型 schemas
+3. 实现业务逻辑 services
+4. 返回响应 

@@ -3,7 +3,20 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.models.product_category import ProductCategory
-from app.schemas.admin.product import CreateProductRequest, SearchProductRequest
+from app.schemas.admin.product import CreateProductRequest, SearchProductRequest, EditProductRequest
+
+"""
+    关于商品的业务逻辑
+        基础的功能：
+            1. 创建商品
+            2. 商品查询
+            3. 商品编辑
+                1. 商品状态切换 - 上架/下架  在前端页面中可以通过switch开关进行单独改变 实质上也是编辑修改商品信息
+                2. 商品分类切换
+                3. 商品库存更新
+            4. 商品删除
+            
+"""
 
 class ProductService:
     # 创建商品
@@ -69,3 +82,39 @@ class ProductService:
         products = db.scalars(query).all()
         return products
 
+    """
+        编辑商品
+            先通过请求体中的id 在数据库中检索对应的数据，并根据请求体中的参数进行更新
+    """
+    def edit_product(self, db: Session, request: EditProductRequest):
+        product = db.scalar(select(Product).where(Product.id == request.id))
+        if not product:
+            raise HTTPException(status_code=400, detail="商品不存在")
+
+        update_data = request.model_dump(exclude_unset=True, exclude={"id"})
+        for field, value in update_data.items():
+            setattr(product, field, value)
+
+        try:
+            db.commit()
+            db.refresh(product)
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=500, detail=f"商品编辑失败: {str(e)}")
+        return product
+
+    """
+        删除商品
+    先通过请求体中的id 在数据库中检索对应的数据，若存在则删除，否则抛出异常
+    """
+    def delete_product(self, db: Session, product_id: int):
+        product = db.scalar(select(Product).where(Product.id == product_id))
+        if not product:
+            raise HTTPException(status_code=400, detail="商品不存在")
+        try:
+            db.delete(product)
+            db.commit()
+        except Exception as e:
+            db.rollback()
+            raise HTTPException(status_code=500, detail=f"商品删除失败: {str(e)}")
+        return {"message": "商品删除成功"}
