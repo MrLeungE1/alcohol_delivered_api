@@ -5,7 +5,7 @@ from app.routers.admin.category import router as category_router
 from app.routers.admin.sys_admin import router as sys_admin_router
 init_database()
 
-app = FastAPI()
+app = FastAPI(title="酒水配送系统")
 app.include_router(product_router)
 app.include_router(category_router)
 app.include_router(sys_admin_router)
