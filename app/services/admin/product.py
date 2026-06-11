@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.models.product_category import ProductCategory
+from app.models.product_image import ProductImage
 from app.schemas.admin.product import CreateProductRequest, SearchProductRequest, EditProductRequest
 
 """
@@ -42,13 +43,22 @@ class ProductService:
             price=request.price,
             market_price=request.market_price,
             thumb=request.thumb,
-            detail_img=request.detail_img,
+            # detail_img=request.detail_img,
             stock=request.stock,
             is_hot=request.is_hot,
             is_special=request.is_special,
             desc=request.desc,
             status=request.status,
         )
+        if request.images:
+            for image in request.images:
+                product_image = ProductImage(
+                    image_url=image.image_url,
+                    image_type=image.image_type,
+                    sort=image.sort,
+                    product=product,
+                )
+                product.images.append(product_image)
         try:
             db.add(product)
             db.flush()
@@ -91,9 +101,18 @@ class ProductService:
         if not product:
             raise HTTPException(status_code=400, detail="商品不存在")
 
-        update_data = request.model_dump(exclude_unset=True, exclude={"id"})
+        update_data = request.model_dump(exclude_unset=True, exclude={"id", "images"})
         for field, value in update_data.items():
             setattr(product, field, value)
+        if request.images:
+            for image in request.images:
+                product_image = ProductImage(
+                    image_url=image.image_url,
+                    image_type=image.image_type,
+                    sort=image.sort,
+                    product=product,
+                )
+                product.images.append(product_image)
 
         try:
             db.commit()

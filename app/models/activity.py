@@ -1,5 +1,6 @@
 from app.db.base import Base
 from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy.orm import relationship
 
 class Activity(Base):
     __tablename__ = "activity"
@@ -11,4 +12,11 @@ class Activity(Base):
     end_time = Column(DateTime, nullable=False, comment="结束时间")
     status = Column(Integer, default=1, comment="1=正常 0=停用")
     desc = Column(Text, comment="活动描述")
+
+    activity_products = relationship(
+        "ActivityProduct",
+        back_populates="activity",
+        lazy="selectin",
+        cascade="all, delete-orphan",
+    )
 

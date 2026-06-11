@@ -12,7 +12,7 @@ class Product(Base):
     price = Column(Numeric(10,2), nullable=False, comment="售价")
     market_price = Column(Numeric(10,2), comment="原价/划线价")
     thumb = Column(String(255), comment="商品缩略图")
-    detail_img = Column(String(255), comment="详情图片")
+    # detail_img = Column(String(255), comment="详情图片") # 正常情况下，详情图片不止一张，而且商品还会有自己的轮播图，所以我们从表结构中将这个注释掉，重新创建一张商品图的表与商品进行关联
     stock = Column(Integer, nullable=False, default=0, comment="库存")
     is_hot = Column(Integer, default=0, comment="1=热销商品")
     is_special = Column(Integer, default=0, comment="1=特价商品")
@@ -23,4 +23,11 @@ class Product(Base):
     category = relationship(
         "ProductCategory",  # 用字符串，避免循环引用
         lazy="selectin"
+    )
+
+    images = relationship(
+         "ProductImage",
+        back_populates="product",
+        lazy="selectin",
+        cascade="all, delete-orphan"
     )

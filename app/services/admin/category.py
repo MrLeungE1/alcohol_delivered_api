@@ -2,7 +2,7 @@ from app.models.product_category import ProductCategory
 from sqlalchemy import select
 from fastapi import HTTPException
 from sqlalchemy.orm import Session
-from app.schemas.admin.category import CreateCategoryRequest, UpdateCategoryRequest, CategoryListRequest
+from app.schemas.admin.category import CreateCategoryRequest, UpdateCategoryRequest, CategoryListRequest, SortCategoryRequest
 
 # 公共函数 验证名称是否存在
 def verify_category_name(db: Session, cate_name: str, exclude_id: int = None):

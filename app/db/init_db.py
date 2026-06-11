@@ -13,6 +13,7 @@ from app.models.user_address import UserAddress
 from app.models.activity_product import ActivityProduct
 from app.models.order_item import OrderItem
 from app.models.orders import Orders
+from app.models.product_image import ProductImage
 
 
 

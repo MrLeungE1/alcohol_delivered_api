@@ -2,8 +2,8 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    DATABASE_URL: str  # 👈 只声明变量，不写死值！
-
+    DATABASE_URL: str 
+    UPLOAD_DIR: str = "uploads"
     class Config:
         env_file = ".env"  # 强制从 .env 加载
 
