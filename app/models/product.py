@@ -10,6 +10,7 @@ class Product(Base):
     cate_id = Column(Integer, ForeignKey("product_category.id"), nullable=False, index=True, comment="分类ID")
     product_name = Column(String(100), nullable=False, comment="商品名称")
     price = Column(Numeric(10,2), nullable=False, comment="售价")
+    cost_price = Column(Numeric(10,2), comment="进货价")
     market_price = Column(Numeric(10,2), comment="原价/划线价")
     thumb = Column(String(255), comment="商品缩略图")
     # detail_img = Column(String(255), comment="详情图片") # 正常情况下，详情图片不止一张，而且商品还会有自己的轮播图，所以我们从表结构中将这个注释掉，重新创建一张商品图的表与商品进行关联

@@ -41,6 +41,7 @@ class ProductService:
             cate_id=request.cate_id,
             product_name=request.product_name,
             price=request.price,
+            cost_price=request.cost_price,
             market_price=request.market_price,
             thumb=request.thumb,
             # detail_img=request.detail_img,

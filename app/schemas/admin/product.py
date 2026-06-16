@@ -19,6 +19,7 @@ class CreateProductRequest(BaseModel):
     cate_id: int = Field(..., gt=0, description="分类ID")
     product_name: str = Field(..., min_length=1, max_length=100, description="商品名称")
     price: float = Field(..., gt=0, description="售价")
+    cost_price: Optional[float] = Field(None, ge=0, description="进货价")
     market_price: Optional[float] = Field(None, description="原价/划线价")
     thumb: Optional[str] = Field(None, description="商品缩略图")
     # detail_img: Optional[str] = Field(None, description="详情图片(JSON)")
@@ -41,6 +42,7 @@ class ProductResponse(BaseModel):
     cate_id: int
     product_name: str
     price: float
+    cost_price: Optional[float] = None
     market_price: Optional[float] = None
     thumb: Optional[str] = None
     # detail_img: Optional[str] = None
@@ -58,6 +60,7 @@ class EditProductRequest(BaseModel):
     cate_id: Optional[int] = None
     product_name: Optional[str] = None
     price: Optional[float] = None
+    cost_price: Optional[float] = None
     market_price: Optional[float] = None
     thumb: Optional[str] = None
     # detail_img: Optional[str] = None

@@ -14,6 +14,7 @@ from app.routers.admin.category import router as category_router
 from app.routers.admin.product import router as product_router
 from app.routers.admin.sys_admin import router as sys_admin_router
 from app.routers.wx.product import router as wx_product_router
+from app.routers.wx.cart import router as wx_cart_router
 from app.routers.upload import router as upload_router
 
 init_database()
@@ -29,6 +30,7 @@ app.include_router(category_router)
 app.include_router(sys_admin_router)
 app.include_router(activity_router)
 app.include_router(wx_product_router)
+app.include_router(wx_cart_router)
 
 SKIP_WRAP_PATHS = ("/docs", "/redoc", "/openapi.json", "/static")
 
