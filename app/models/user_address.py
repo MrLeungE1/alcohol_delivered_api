@@ -14,7 +14,6 @@ class UserAddress(Base):
     lonlat = Column(String(255), nullable=False, comment="经纬度")
     is_default = Column(Integer, nullable=True, default=0, comment="是否默认地址 1:是 0:否")
 
-    # 🔥 修复：对应 back_populates
     user = relationship(
         "SysUser",
         foreign_keys=[user_id],

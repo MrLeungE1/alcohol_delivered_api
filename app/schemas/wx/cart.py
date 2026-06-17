@@ -21,6 +21,8 @@ class AddCartResponse(BaseModel):
     price: float = 0.00
     total_price: float = 0.00
 
+    model_config = {"from_attributes": True}
+
 class CartListResponse(BaseModel):
     id: int
     user_id: int
@@ -30,6 +32,15 @@ class CartListResponse(BaseModel):
     total_price: float = 0.00
     products: ProductResponse = None
 
+    model_config = {"from_attributes": True}
+
 class ChangeCartNumRequest(AddCartRequest):
     id: int = None
     
+
+# 购物车结算
+class SettlementCartRequest(BaseModel):
+    cart_list: List[CartListResponse] = None # 购物车列表
+    delivery_type: int = None # 配送方式
+    address_id: int = None # 收货地址ID 
+    total_amount: float = 0.00 # 总金额
