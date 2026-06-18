@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.schemas.wx.cart import AddCartRequest, AddCartResponse, CartListResponse, ChangeCartNumRequest
+from app.schemas.wx.cart import AddCartRequest, AddCartResponse, CartListResponse, ChangeCartNumRequest, SettlementCartRequest
 from app.services.wx.cart import CartService
 from typing import List
 
@@ -37,3 +37,7 @@ def change_cart_num(request: ChangeCartNumRequest, db: Session = Depends(get_db)
 @router.delete('/{cart_id}', response_model=dict, summary="删除购物车中商品")
 def delete_cart(cart_id: int, db: Session = Depends(get_db)):
     return cart_service.delete_cart(db, cart_id)
+
+@router.post('/settlement', summary="购物车结算创建订单")
+def settlement_cart(request: SettlementCartRequest, db: Session = Depends(get_db)):
+    return cart_service.settlement_carts(db, request)

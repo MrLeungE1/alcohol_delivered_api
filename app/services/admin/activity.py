@@ -77,3 +77,7 @@ class ActivityService:
             db.rollback()
             raise HTTPException(status_code=500, detail=f"活动删除失败: {str(e)}")
         return {"message": "活动删除成功"}
+
+    @staticmethod
+    def get_all_activities(db: Session):
+        return db.scalars(select(Activity)).all()

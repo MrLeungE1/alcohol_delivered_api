@@ -2,6 +2,9 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models.product import Product
 from app.models.user_cart import UserCart
+from app.models.orders import Orders
+from app.models.order_item import OrderItem
+from datetime import datetime
 
 from app.schemas.wx.cart import AddCartRequest, ChangeCartNumRequest, SettlementCartRequest
 
@@ -112,20 +115,36 @@ class CartService:
         db.commit()
         return cart
     
+    def settlement_carts(self, db: Session, request: SettlementCartRequest):
+        # 这里将购物车列表、配送方式、收货地址id、总金额传过来了。需要先在orders表中插入 用户订单的关联关系。在order_item(订单表)中有订单信息
+        # 先创建 订单
+        order_no = f"AL{datetime.now().strftime('%Y%m%d%H%M%S')}{request.user_id}"
+        order = Orders(
+            order_no=order_no,
+            user_id=request.user_id,
+            delivery_type=request.delivery_type,
+            address_id=request.address_id,
+            total_amount=request.total_amount,
+        )
+        db.add(order)
+        db.commit()
+        db.refresh(order)
+        # 再创建 订单商品
+        for cart in request.cart_list:
+            product = db.query(Product).filter(Product.id == cart.product_id).first()
+            if product is None:
+                raise HTTPException(status_code=404, detail="商品不存在")
+            order_item = OrderItem(
+                order_id=order.id,
+                product_id=cart.product_id,
+                product_name=product.product_name,
+                product_img=product.thumb,
+                price=cart.price,
+                num=cart.num,
+                # total_price=cart.total_price,
+            )
+            db.add(order_item)
+        db.commit()
+        return order
 
-"""
-    上方已经完成了 加入购物车、删除购物车、修改购物车数量  
-    现在还有哪些功能：
-    收货地址的增删改查
-    结算-->生成订单（组合收货地址、商品信息、前端做一些提示、支付方式[暂时没有、配送/自提]）:
-        订单 增删改查 
-
-"""
-
-# 结算操作之后要判断 1.当前时间商品库存与下单数量的关系 2. 下单成功生成订单 改变库存数量 
-
-def settlement_cart(self, db: Session, request: SettlementCartRequest):
-    # 这里将购物车列表、配送方式、收货地址id、总金额传过来了。需要先在orders表中插入 用户订单的关联关系。在order_item(订单表)中有订单信息
-    # 先创建 订单
-    # order_no = "AL{datetime.now().strftime('%Y%m%d%H%M%S')}{request.user_id}"
-    return {'message': '结算成功'}
+    

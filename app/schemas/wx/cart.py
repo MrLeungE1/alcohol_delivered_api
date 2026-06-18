@@ -40,6 +40,7 @@ class ChangeCartNumRequest(AddCartRequest):
 
 # 购物车结算
 class SettlementCartRequest(BaseModel):
+    user_id: int
     cart_list: List[CartListResponse] = None # 购物车列表
     delivery_type: int = None # 配送方式
     address_id: int = None # 收货地址ID 

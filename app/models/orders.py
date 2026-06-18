@@ -11,6 +11,7 @@ class Orders(Base):
     address_id = Column(Integer, ForeignKey("user_address.id"), nullable=False, comment="地址ID")
     total_amount = Column(Numeric(10,2), nullable=False, comment="订单金额")
     status = Column(Integer, default=1, comment="1 待配送 2 配送中 3 已完成")
+    delivery_type = Column(Integer, default=1, comment="1 配送 2 自提")
     create_time = Column(DateTime, nullable=False, default=func.now(), comment="订单时间")
 
     user = relationship("SysUser", backref="orders", lazy="selectin")
